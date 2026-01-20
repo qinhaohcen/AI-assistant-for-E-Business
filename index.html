@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品图文草稿生成系统</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>商品图文草稿生成系统</h1>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="dashboard">首页</button>
+                <button class="nav-tab" data-tab="tasks">任务列表</button>
+                <button class="nav-tab" data-tab="generate">生成草稿</button>
+                <button class="nav-tab" data-tab="templates">模板库</button>
+                <button class="nav-tab" data-tab="settings">设置</button>
+            </nav>
+        </header>
+
+        <main class="app-main">
+            <!-- 首页 -->
+            <section id="dashboard" class="tab-content active">
+                <div class="dashboard-section">
+                    <h2>系统概览</h2>
+                    
+                    <!-- 统计卡片 -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="total-products">0</div>
+                                <div class="stat-label">已处理商品</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">✨</div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="total-drafts">0</div>
+                                <div class="stat-label">生成草稿</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💾</div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="total-templates">0</div>
+                                <div class="stat-label">收藏模板</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🚀</div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="active-tasks">0</div>
+                                <div class="stat-label">进行中任务</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 任务进度 -->
+                    <div class="progress-section">
+                        <h3>任务进度</h3>
+                        <div class="progress-list">
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span>夏季新品上线</span>
+                                    <span class="progress-status">进行中</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 65%"></div>
+                                </div>
+                                <div class="progress-info">
+                                    <span>已完成 13/20</span>
+                                    <span>剩余 7</span>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span>爆款商品优化</span>
+                                    <span class="progress-status">已完成</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 100%"></div>
+                                </div>
+                                <div class="progress-info">
+                                    <span>已完成 8/8</span>
+                                    <span>剩余 0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 最近活动 -->
+                    <div class="activity-section">
+                        <h3>最近活动</h3>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon">📝</div>
+                                <div class="activity-content">
+                                    <div class="activity-text">生成了5个夏季T恤的图文草稿</div>
+                                    <div class="activity-time">2026-01-20 14:30</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">💾</div>
+                                <div class="activity-content">
+                                    <div class="activity-text">收藏了"男士运动鞋"模板</div>
+                                    <div class="activity-time">2026-01-20 13:15</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">📤</div>
+                                <div class="activity-content">
+                                    <div class="activity-text">导出了12个商品的草稿</div>
+                                    <div class="activity-time">2026-01-20 11:45</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">📥</div>
+                                <div class="activity-content">
+                                    <div class="activity-text">导入了20个新商品信息</div>
+                                    <div class="activity-time">2026-01-20 10:20</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 商品任务列表页 -->
+            <section id="tasks" class="tab-content">
+                <div class="tasks-section">
+                    <div class="tasks-header">
+                        <h2>商品任务列表</h2>
+                        <div class="tasks-controls">
+                            <button class="btn btn-primary" onclick="addNewTask()">新建任务</button>
+                            <input type="text" id="task-search" placeholder="搜索任务...">
+                            <select id="task-status">
+                                <option value="all">所有状态</option>
+                                <option value="pending">待处理</option>
+                                <option value="processing">处理中</option>
+                                <option value="completed">已完成</option>
+                                <option value="failed">失败</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="tasks-list" id="tasks-list">
+                        <!-- 任务列表将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 批量生成草稿页面 -->
+            <section id="generate" class="tab-content">
+                <div class="input-section">
+                    <h2>商品信息输入</h2>
+                    <div class="input-methods">
+                        <button class="btn active" data-method="manual">在线录入</button>
+                        <button class="btn" data-method="excel">Excel导入</button>
+                    </div>
+
+                    <!-- 在线录入表单 -->
+                    <div id="manual-input" class="input-form active">
+                        <div class="form-group">
+                            <label for="product-name">商品名称</label>
+                            <input type="text" id="product-name" placeholder="请输入商品名称">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="product-category">商品类目</label>
+                                <input type="text" id="product-category" placeholder="请输入商品类目">
+                            </div>
+                            <div class="form-group">
+                                <label for="product-brand">品牌</label>
+                                <input type="text" id="product-brand" placeholder="请输入品牌">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="product-material">材质</label>
+                                <input type="text" id="product-material" placeholder="请输入材质">
+                            </div>
+                            <div class="form-group">
+                                <label for="product-size">尺寸</label>
+                                <input type="text" id="product-size" placeholder="请输入尺寸">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="product-color">颜色</label>
+                                <input type="text" id="product-color" placeholder="请输入颜色">
+                            </div>
+                            <div class="form-group">
+                                <label for="product-audience">适用人群</label>
+                                <input type="text" id="product-audience" placeholder="请输入适用人群">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>保存商品素材到素材库</label>
+                            <input type="checkbox" id="save-to-library" checked>
+                        </div>
+                    </div>
+
+                    <!-- Excel导入表单 -->
+                    <div id="excel-input" class="input-form">
+                        <div class="form-group">
+                            <label for="excel-upload">上传Excel文件</label>
+                            <input type="file" id="excel-upload" accept=".xlsx,.xls">
+                            <p class="hint">支持.xlsx和.xls格式，请按照模板格式导入</p>
+                            <button class="btn btn-secondary">下载Excel模板</button>
+                        </div>
+                        <div class="form-group">
+                            <label>保存商品素材到素材库</label>
+                            <input type="checkbox" id="save-to-library-excel" checked>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="image-upload-section">
+                    <h2>商品图片上传</h2>
+                    <div class="upload-area">
+                        <div class="upload-container">
+                            <h3>商品主图</h3>
+                            <div class="upload-box" id="main-image-upload">
+                                <input type="file" id="main-image" accept="image/*" multiple>
+                                <div class="upload-placeholder">
+                                    <span class="upload-icon">📷</span>
+                                    <p>点击或拖拽上传白底图/场景图</p>
+                                    <p class="hint">支持JPG、PNG格式，最大5MB</p>
+                                </div>
+                            </div>
+                            <div class="upload-preview" id="main-image-preview"></div>
+                        </div>
+
+                        <div class="upload-container">
+                            <h3>参考素材</h3>
+                            <div class="upload-box" id="reference-upload">
+                                <input type="file" id="reference-image" accept="image/*" multiple>
+                                <div class="upload-placeholder">
+                                    <span class="upload-icon">📎</span>
+                                    <p>点击或拖拽上传历史爆款截图</p>
+                                    <p class="hint">支持JPG、PNG格式，最大5MB</p>
+                                </div>
+                            </div>
+                            <div class="upload-preview" id="reference-preview"></div>
+                        </div>
+
+                        <div class="upload-container">
+                            <h3>参考链接</h3>
+                            <input type="text" id="reference-link" placeholder="输入参考商品链接">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-section">
+                    <button id="generate-btn" class="btn btn-primary">批量生成草稿</button>
+                    <button id="clear-btn" class="btn btn-secondary">清空内容</button>
+                    <button id="generate-test-data" class="btn btn-secondary">生成测试数据</button>
+                    <button id="one-click-generate" class="btn btn-primary">一键生成草稿</button>
+                </div>
+            </section>
+
+            <!-- 草稿输出展示 -->
+            <section id="output" class="output-section">
+                <h2>生成结果</h2>
+                <div class="output-list" id="output-list"></div>
+            </section>
+
+            <!-- 模板库管理页面 -->
+            <section id="templates" class="tab-content">
+                <div class="templates-section">
+                    <h2>模板库管理</h2>
+                    <div class="templates-controls">
+                        <input type="text" id="template-search" placeholder="搜索模板...">
+                        <select id="template-filter">
+                            <option value="all">所有模板</option>
+                            <option value="complete">完整组合</option>
+                            <option value="title">标题模板</option>
+                            <option value="slogan">卖点文案</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="exportTemplates()">导出模板</button>
+                        <button class="btn btn-secondary" onclick="importTemplates()">导入模板</button>
+                    </div>
+                    <div class="templates-list" id="templates-list"></div>
+                </div>
+            </section>
+            
+            <!-- 设置页面 -->
+            <section id="settings" class="tab-content">
+                <div class="settings-section">
+                    <h2>系统设置</h2>
+                    
+                    <!-- 默认生成规则 -->
+                    <div class="settings-group">
+                        <h3>默认生成规则</h3>
+                        <div class="form-group">
+                            <label for="default-title-length">标题最大长度</label>
+                            <input type="number" id="default-title-length" value="30" min="10" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="default-slogan-count">卖点数量</label>
+                            <input type="number" id="default-slogan-count" value="2" min="1" max="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="default-save-to-library">默认保存到素材库</label>
+                            <input type="checkbox" id="default-save-to-library" checked>
+                        </div>
+                    </div>
+                    
+                    <!-- 图文风格偏好 -->
+                    <div class="settings-group">
+                        <h3>图文风格偏好</h3>
+                        <div class="form-group">
+                            <label>标题风格</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="title-style" value="concise" checked> 简洁明了</label>
+                                <label><input type="radio" name="title-style" value="detailed"> 详细完整</label>
+                                <label><input type="radio" name="title-style" value="creative"> 创意吸引</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>卖点风格</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="slogan-style" value="feature" checked> 突出功能</label>
+                                <label><input type="radio" name="slogan-style" value="benefit"> 强调益处</label>
+                                <label><input type="radio" name="slogan-style" value="emotional"> 情感共鸣</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="image-style">图片风格偏好</label>
+                            <select id="image-style">
+                                <option value="minimalist">简约风格</option>
+                                <option value="lifestyle">生活场景</option>
+                                <option value="professional">专业展示</option>
+                                <option value="creative">创意设计</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- 系统配置 -->
+                    <div class="settings-group">
+                        <h3>系统配置</h3>
+                        <div class="form-group">
+                            <label for="language">语言设置</label>
+                            <select id="language">
+                                <option value="zh-CN" selected>简体中文</option>
+                                <option value="en-US">English</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="theme">主题风格</label>
+                            <select id="theme">
+                                <option value="chiikawa" selected>Chiikawa动漫风</option>
+                                <option value="modern">现代简约</option>
+                                <option value="professional">专业商务</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- 保存按钮 -->
+                    <div class="settings-actions">
+                        <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+                        <button class="btn btn-secondary" onclick="resetSettings()">恢复默认</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 商品草稿卡片模板 -->
+    <template id="product-draft-template">
+        <div class="product-draft">
+            <div class="draft-image">
+                <img src="" alt="商品主图">
+            </div>
+            <div class="draft-content">
+                <h3 class="draft-title"></h3>
+                <div class="draft-slogans"></div>
+                <div class="draft-actions">
+                    <button class="btn btn-sm btn-primary">收藏</button>
+                    <button class="btn btn-sm btn-secondary">下载</button>
+                    <button class="btn btn-sm btn-secondary">编辑</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+</html>
